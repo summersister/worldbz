@@ -1,0 +1,76 @@
+spring:
+  profiles:
+    active: dev
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    c2cdb:
+      jdbc-url: jdbc:mysql://mysql-test.cluster-cryalii7qi34.ap-northeast-1.rds.amazonaws.com:3306/yobtc-c2c-db?useUnicode=true&characterEncoding=UTF-8&useSSL=false&autoReconnect=true&failOverReadOnly=false
+      username: admin
+      password: Fwt0IDTzen5kmJ7X
+    systemdb:
+      jdbc-url: jdbc:mysql://mysql-test.cluster-cryalii7qi34.ap-northeast-1.rds.amazonaws.com:3306/yobtc-system-db?useUnicode=true&characterEncoding=UTF-8&useSSL=false&autoReconnect=true&failOverReadOnly=false
+      username: admin
+      password: Fwt0IDTzen5kmJ7X
+    commondb:
+      jdbc-url: jdbc:mysql://mysql-test.cluster-cryalii7qi34.ap-northeast-1.rds.amazonaws.com:3306/yobtc-common-db?useUnicode=true&characterEncoding=UTF-8&useSSL=false&autoReconnect=true&failOverReadOnly=false
+      username: admin
+      password: Fwt0IDTzen5kmJ7X
+    contentdb:
+      jdbc-url: jdbc:mysql://mysql-test.cluster-cryalii7qi34.ap-northeast-1.rds.amazonaws.com:3306/yobtc-content-db?useUnicode=true&characterEncoding=UTF-8&useSSL=false&autoReconnect=true&failOverReadOnly=false
+      username: admin
+      password: Fwt0IDTzen5kmJ7X
+    historydb:
+      jdbc-url: jdbc:mysql://mysql-test.cluster-cryalii7qi34.ap-northeast-1.rds.amazonaws.com:3306/yobtc-history-db?useUnicode=true&characterEncoding=UTF-8&useSSL=false&autoReconnect=true&failOverReadOnly=false
+      username: admin
+      password: Fwt0IDTzen5kmJ7X
+    userdb:
+      jdbc-url: jdbc:mysql://mysql-test.cluster-cryalii7qi34.ap-northeast-1.rds.amazonaws.com:3306/yobtc-user-db?useUnicode=true&characterEncoding=UTF-8&useSSL=false&autoReconnect=true&failOverReadOnly=false
+      username: admin
+      password: Fwt0IDTzen5kmJ7X
+
+server:
+  port: 20003
+
+redis:
+  host: localhost
+  port : 6379
+  pwd:
+  maxIdle: 10
+  minIdle: 5
+  maxTotal: 100
+  maxWaitMillis: 30000
+  testOnBorrow: true
+  testOnReturn: false
+  timeOut: 3000
+
+swagger:
+  show: true
+
+pagehelper:
+  auto-dialect: true
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+  page-size-zero: true
+
+
+logging:
+  level:
+    com.dear.mapper: DEBUG
+
+fileSetting:
+  savePath: C:/dearTemp
+  accessPath: file
+
+SystemParam:
+  global:
+    pc1: 1000
+    pc2: 500000
+    pc3: 1000000
+    levenOne: 100
+    levenTwo: 500000
+    levenThree: 1000000
+    currencyRmbId: 888
+    thresholdDay: 10
+    thresholdValue: 100
+    whetherRmbWithdraw: false

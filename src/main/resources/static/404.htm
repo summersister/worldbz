@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        我是404啊
+    </div>
+</body>
+<script>
+    var ws = new WebSocket('ws://10.10.11.243:8331');
+
+        ws.onopen=function(){
+            console.log('WS开启')
+            ws.send('halo');
+        }
+
+        ws.close=function(e){
+            console.log('WS关闭');
+        }
+
+        ws.onmessage=function(e){
+            console.log('接收到数据的数据模型：'+e);
+        }
+
+</script>
+
+</html>

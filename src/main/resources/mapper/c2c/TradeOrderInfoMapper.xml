@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.richman.mapper.c2c.TradeOrderInfoMapper">
+
+    <!-- 查某段时间内的指定币种的成交量 -->
+    <select id="sumTradeAmount" resultType="java.math.BigDecimal" >
+        select sum(amount) from trade_order_info
+        where (status = 3 or status = 8) and payUserId = #{payUserId}
+        and createTime >= #{startTime} and createTime &lt;= #{endTime}
+    </select>
+
+    <!-- 根据用户和状态查询交易订单的数量 (count) -->
+    <select id="getTradeOrderCountByUserAndStatus"  resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM
+            (
+                SELECT
+                    toi.id,
+                    toi.payUserId,
+                    toi.sellUserId,
+                    toi.coinId,
+                    toi.status AS tradeStatus,
+                    toi.price,
+                    toi.quantity,
+                    toi.amount,
+                    toi.advertiseId,
+                    toi.createTime
+                FROM
+                    trade_order_info toi
+                WHERE
+                    (toi.payUserId = #{userId} OR toi.sellUserId = #{userId})
+                    -- 处理中
+                    <if test="disposeOrHistory == true">AND toi.status IN(1, 2, 4, 7)</if>
+                    -- 历史订单
+                    <if test="disposeOrHistory == false">AND toi.status IN(3, 5, 6, 8, 9, 10, 11)</if>
+            ) t
+        INNER JOIN finance_coin_base_info coin ON t.coinId = coin.id
+        INNER JOIN trade_advertise_order tao ON t.advertiseId = tao.id
+    </select>
+
+    <!-- 根据用户和状态获取用户交易订单 -->
+    <select id="listMyTradeOrderByStatus" resultType="com.richman.domain.c2c.vo.OtcTradeOrderVO">
+        SELECT
+        t.*, coin.defaultEnName AS coinName,
+        coin.priceLimit,
+        coin.amountLimit
+        FROM
+        (
+        SELECT
+        toi.id,
+        toi.payUserId,
+        toi.sellUserId,
+        toi.coinId,
+        toi.status AS tradeStatus,
+        toi.price,
+        toi.quantity,
+        toi.amount,
+        toi.advertiseId,
+        toi.createTime
+        FROM
+        trade_order_info toi
+        WHERE
+        (toi.payUserId = #{userId} OR toi.sellUserId = #{userId}) AND toi.coinId = #{coinId}
+        <if test="statuses != null">
+            AND toi.status IN
+            <foreach collection="statuses" item="status" separator="," open="(" close=")">
+                #{status}
+            </foreach>
+        </if>
+        ) t
+        INNER JOIN finance_coin_base_info coin ON t.coinId = coin.id
+        ORDER BY t.createTime DESC
+    </select>
+
+    <!--  查询所有买/卖单 -->
+    <!--  卖单升序（商家卖，其他用户买，价格低靠前） -->
+    <!--  买单降序（商家买，其他用户卖，价格高靠前） -->
+    <!--  价格一致按成交单数降序（成交量高靠前  -->
+    <select id="listPayOrSellOrderV2" resultType="com.richman.domain.c2c.vo.BuyOrSellOrderVO">
+        SELECT
+        tao.id,
+        tao.coinId,
+        tao.price,
+        tao.minQuantity,
+        tao.orderQuantity,
+        tao.waitDisposeQuantity,
+        tao.finishQuantity,
+        tao.isBank,
+        tao.isAlipay,
+        tao.isWeChat,
+        tc.nickName,
+        tc.successCount,
+        tc.failedCount,
+        ((tc.totalUsedTime / tc.totalFinishCount) / 1000 / 60) AS averageTime,
+        tao.singleMaxAmountLimit,
+        tc.successCount successCount,
+        tc.failedCount failedCount
+        FROM trade_advertise_order tao
+        LEFT JOIN trade_creditworthiness tc ON tao.userId = tc.id
+        WHERE (tao.orderQuantity - (tao.waitDisposeQuantity + tao.finishQuantity)) >= tao.minQuantity
+        <if test="coinId != null">AND tao.coinId = #{coinId}</if>
+        <if test="tradeType != null">AND tao.tradeType = #{tradeType}</if>
+        <if test="isNeglectHistory">AND tao.status = 1</if>
+        <if test="!isNeglectHistory">AND tao.status = 2</if>
+        ORDER BY
+        <if test="tradeType == 2">tao.price ASC, </if>
+        <if test="tradeType == 1">tao.price DESC, </if>
+        tao.createTime ASC
+    </select>
+
+    <!-- 根据主键查询交易订单 -->
+    <select id="getTradeOrderInfoById" parameterType="java.lang.Long" resultType="com.richman.domain.c2c.TradeOrderInfo">
+        SELECT * FROM trade_order_info WHERE id = #{id}
+    </select>
+
+    <!-- 查询某用户三天内取消的订单数 -->
+    <select id="getWithinThreeDaysCancelOrder" resultType="java.lang.Integer">
+        SELECT
+          COUNT(1)
+        FROM
+          trade_order_info
+        WHERE
+          (`status` = 10 OR `status` = 11)
+          AND payUserId = #{userId}
+        AND <![CDATA[ createTime >= (
+        UNIX_TIMESTAMP() - (3600 * 24 * 3)
+        ) ]]>
+        AND <![CDATA[ createTime < UNIX_TIMESTAMP() ]]>
+    </select>
+
+    <!-- 保存交易订单 -->
+    <insert id="saveTradeOrderInfo" parameterType="com.richman.domain.c2c.TradeOrderInfo"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO trade_order_info (
+            payUserId,
+            payUserName,
+            payChatAccount,
+            payChatPass,
+            sellUserId,
+            sellUserName,
+            sellChatAccount,
+            sellChatPass,
+            coinId,
+            price,
+            quantity,
+            amount,
+            poundage,
+            userPoundage,
+            createTime,
+            bankNo,
+            bankName,
+            bankOpen,
+            bankRealName,
+            alipayAccount,
+            alipayOpenName,
+            alipayQrPath,
+            weChatAccount,
+            weChatOpenName,
+            weChatQrPath,
+            paymentTime,
+            updateTime,
+            status,
+            disposer,
+            arbitrationTime,
+            mistakeId,
+            mistakeName,
+            disposeRemark,
+            remark,
+            advertiseId,
+            delIM
+        )
+        VALUES
+        (
+            #{payUserId},
+            #{payUserName},
+            #{payChatAccount},
+            #{payChatPass},
+            #{sellUserId},
+            #{sellUserName},
+            #{sellChatAccount},
+            #{sellChatPass},
+            #{coinId},
+            #{price},
+            #{quantity},
+            #{amount},
+            #{poundage},
+            #{userPoundage},
+            -- 创建时间
+            UNIX_TIMESTAMP(),
+            #{bankNo},
+            #{bankName},
+            #{bankOpen},
+            #{bankRealName},
+            #{alipayAccount},
+            #{alipayOpenName},
+            #{alipayQrPath},
+            #{weChatAccount},
+            #{weChatOpenName},
+            #{weChatQrPath},
+            #{paymentTime},
+            #{updateTime},
+            -- 交易状态
+            1,
+            #{disposer},
+            #{arbitrationTime},
+            #{mistakeId},
+            -- 过错方姓名
+            '',
+            -- 处理备注
+            '',
+            -- 备注
+            '',
+            #{advertiseId},
+            0
+        )
+    </insert>
+
+    <!-- 修改交易订单为仲裁状态 -->
+    <update id="updateTradeOrderIsArbitration" parameterType="java.lang.Long">
+        UPDATE trade_order_info SET status = 7, arbitrationTime = UNIX_TIMESTAMP()
+        WHERE id = #{id} AND status IN (2)
+    </update>
+
+    <!-- 取消交易订单 -->
+    <update id="updateCancelOrder" >
+        UPDATE trade_order_info SET
+          status = 10,
+          remark = #{remark},
+          updateTime = UNIX_TIMESTAMP()
+        WHERE id = #{id} AND status = 1 AND payUserId = #{userId}
+    </update>
+
+    <!-- 订单已放币时更新交易订单为确认放币 -->
+    <update id="updateOrderIsAffirmOutCoin">
+        UPDATE trade_order_info SET
+          status = 3,
+          updateTime = UNIX_TIMESTAMP()
+        WHERE id = #{id}
+        AND status = 2
+    </update>
+
+    <!-- 订单未放币时更新交易订单为确认放币 -->
+    <update id="updateOrderIsAffirmOutCoinNot">
+        UPDATE trade_order_info SET
+          status = 3,
+          updateTime = UNIX_TIMESTAMP(),
+          paymentTime = UNIX_TIMESTAMP()
+        WHERE id = #{id}
+        AND status = 1
+    </update>
+
+    <!-- 修改交易订单为确认付款 -->
+    <update id="updateOrderIsAffirmPayment">
+        UPDATE trade_order_info SET
+          status = 2,
+          paymentTime = UNIX_TIMESTAMP(),
+          updateTime = UNIX_TIMESTAMP()
+          <if test="paymentMethod != null">, paymentMethod = #{paymentMethod}</if>
+        WHERE id = #{id}
+        AND status = 1
+        AND payUserId = #{userId}
+    </update>
+
+</mapper>
