@@ -22,7 +22,7 @@
         </javaTypeResolver>
 
         <!--指定javaBean生成的位置 javaBean生成的位置  2  -->
-        <javaModelGenerator targetPackage="com.richman.domain.bbs" targetProject="./src/main/java">
+        <javaModelGenerator targetPackage="com.dear.domain.bbs" targetProject="./src/main/java">
             <property name="enableSubPackages" value="true" />
             <property name="trimStrings" value="false" />
         </javaModelGenerator>
@@ -33,7 +33,7 @@
         </sqlMapGenerator>
 
         <!--指定dao接口生成的位置  4  -->
-        <javaClientGenerator type="XMLMAPPER" targetPackage="com.richman.mapper.c2c"
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.dear.mapper.bbs"
                              targetProject="./src/main/java">
             <property name="enableSubPackages" value="true" />
         </javaClientGenerator>

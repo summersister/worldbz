@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dear.mapper.bbs.UserDetailsMapper">
+
+  <insert id="insert" parameterType="com.dear.domain.bbs.UserDetails">
+    insert into user_details (userId, sex, birthday,
+      sign, updateTime)
+    values (#{userId,jdbcType=INTEGER}, #{sex}, #{birthday,jdbcType=TIMESTAMP},
+      #{sign,jdbcType=VARCHAR}, #{updateTime})
+  </insert>
+
+  <update id="updateDetailsByUserId" parameterType="com.dear.domain.bbs.vo.UserDataVO">
+    UPDATE user_details
+    SET
+    sex = #{sex},
+    sign = #{sign},
+    birthday = #{birthday},
+    updateTime = NOW()
+    WHERE userId = #{userId}
+  </update>
+
+</mapper>
