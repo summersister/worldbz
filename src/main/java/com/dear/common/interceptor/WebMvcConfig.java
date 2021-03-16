@@ -33,8 +33,6 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
 
         //文件读取拦截修改
         registry.addResourceHandler(accessPath + "/**").addResourceLocations("file:" + savePath + "/");
-
-
         registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
         registry.addResourceHandler("/templates/**").addResourceLocations("classpath:/templates/");
         /*放行swagger*/

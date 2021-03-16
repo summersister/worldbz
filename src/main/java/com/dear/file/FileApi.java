@@ -1,7 +1,6 @@
 package com.dear.file;
 
 import com.dear.common.annotaion.Login;
-import com.dear.common.base.BaseApi;
 import com.dear.common.bean.ResultCode;
 import com.dear.common.bean.ResultJson;
 import io.swagger.annotations.Api;
@@ -24,7 +23,7 @@ import java.util.UUID;
 @RestController
 @Api(tags = {"文件管理"})
 @RequestMapping("/base/file")
-public class FileApi extends BaseApi {
+public class FileApi {
 
     @Value("${fileSetting.savePath}")
     private String savePath;
