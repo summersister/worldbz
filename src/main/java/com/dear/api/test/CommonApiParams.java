@@ -1,15 +1,12 @@
 package com.dear.api.test;
 
 
-import com.dear.common.bean.ResultCode;
 import com.dear.common.bean.ResultJson;
-import com.dear.common.cache.redis.RedisUtil;
 import com.dear.common.util.jwt.AesUtil;
 import com.dear.common.util.jwt.JwtHelper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -48,19 +45,6 @@ public class CommonApiParams {
         ResultJson ret = new ResultJson();
         ret.setModel(JwtHelper.createJWT(userId));
         return ret;
-    }
-
-    @Autowired
-    private RedisUtil cache;
-
-    @ApiOperation(value = "测试redis get", notes = "返回token")
-    @RequestMapping(value = "/v1/redisTest", method = RequestMethod.POST)
-    public @ResponseBody
-    ResultJson redisTest(@RequestParam("key") String key) {
-
-        String s = this.cache.get(key);
-
-        return new ResultJson(ResultCode.OK.getCode(), s);
     }
 
 }

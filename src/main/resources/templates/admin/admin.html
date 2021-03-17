@@ -168,6 +168,16 @@
                         </form>
                     </div>
                 </div>
+                <div id="upload-file-list-cache">
+                    <div class="row">
+                        <div class="col-xs-6 col-md-3">
+                            <a href="#" class="thumbnail">
+                                <img src="..." alt="...">
+                            </a>
+                        </div>
+                        ...
+                    </div>
+                </div>
 
             </div>
             <div class="modal-footer">
@@ -229,10 +239,11 @@
     }
 
     function initFileInput(ctrlName) {
+        console.log("初始化");
         var control = $('#' + ctrlName);
         control.fileinput({
             language: 'zh', //设置语言
-            uploadUrl: "/base/file/admin/uploadTest", //上传的地址
+            uploadUrl: "/base/file/admin/uploadList", //上传的地址
             allowedFileExtensions: ['jpg', 'gif', 'png'],//接收的文件后缀
             uploadAsync: false, //默认异步上传，这里如果不是异步上传，多个图片一次性提交到后台，只发一次请求，如果为异步上传，每张图片都会发一次请求，多次请求
             showUpload: true, //是否显示上传按钮
@@ -257,8 +268,15 @@
             console.log('文件正在上传');
         }).on("filebatchuploadsuccess", function (event, data, previewId, index) {    //一个文件上传成功
             var response = data.response;
-            console.log(response);//打印出返回的json
-            console.log(response.status);//打印出状态
+            console.log(response);
+
+            if(response.code == 0) {
+
+                var model = response.model;
+
+                $(".fileinput-remove-button").click();
+            }
+
         }).on('filebatchuploaderror', function(event, data, msg) {  //一个文件上传失败
             console.log('文件上传失败！'+data.status);
         })

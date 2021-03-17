@@ -4,10 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.dear.common.bean.ExceptionLog;
 import com.dear.common.bean.ResultCode;
 import com.dear.common.bean.ResultJson;
-import com.dear.common.cache.redis.RedisUtil;
-import com.dear.common.cache.redis.config.RedisKey;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -16,10 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-
-    @Autowired
-    private RedisUtil cache;
-
     /**
      * 切面拦截所有异常 返回状态码1 记录异常到redis中
      *
@@ -46,7 +39,7 @@ public class GlobalExceptionHandler {
 
         ExceptionLog exceptionLog = new ExceptionLog(param, url, message, cause, stack, time);
 
-        this.cache.setex(RedisKey.EXCEPTION_LOG_ + time, JSON.toJSONString(exceptionLog), 3600);
+        //this.cache.setex(RedisKey.EXCEPTION_LOG_ + time, JSON.toJSONString(exceptionLog), 3600);
 
         return new ResultJson(ResultCode.ERROR.getCode(), null);
 
