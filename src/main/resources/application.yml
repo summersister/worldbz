@@ -32,13 +32,6 @@ redis:
 swagger:
   show: true
 
-pagehelper:
-  auto-dialect: true
-  reasonable: true
-  support-methods-arguments: true
-  params: count=countSql
-  page-size-zero: true
-
 
 logging:
   level:

@@ -6,9 +6,11 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
-@TableName("community")
-public class Community {
+@TableName("product")
+public class Product {
 
     @TableId(type = IdType.AUTO)
     private Integer id;
@@ -26,8 +28,8 @@ public class Community {
     private boolean del;
 
     @TableField(value = "create_time")
-    private Long createTime;
+    private Date createTime;
 
     @TableField(value = "update_time")
-    private Long updateTime;
+    private Date updateTime;
 }

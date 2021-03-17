@@ -1,8 +1,7 @@
 package com.dear.api.community;
 
 import com.alibaba.fastjson.JSONObject;
-import com.dear.api.community.service.ICommunityService;
-import com.dear.common.bean.ResultCode;
+import com.dear.api.community.service.IProductService;
 import com.dear.common.bean.ResultJson;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -14,33 +13,33 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
-@Api(tags = {"社区中心"})
+@Api(tags = {"产品中心"})
 @RestController
-@RequestMapping("/community")
-public class CommunityApi {
+@RequestMapping("/product")
+public class ProductApi {
 
     @Autowired
-    private ICommunityService service;
+    private IProductService service;
 
-    @ApiOperation(value = "获取基本社区列表",
+    @ApiOperation(value = "获取基本产品列表",
             notes = "\n* 参数示例：" +
                     "\n* " +
                     "\n* 参数说明 " +
                     "\n* pageNo PageSize " +
                     "\n* ")
-    @RequestMapping(value = "/v1/getCommunityList", method = RequestMethod.POST)
-    public ResultJson getCommunityList(@RequestBody JSONObject jo){
+    @RequestMapping(value = "/v1/getProductList", method = RequestMethod.POST)
+    public ResultJson getProductList(){
 
-        Integer pageNo = jo.getInteger("pageNo");
+        Integer pageNo = null;
 
-        Integer pageSize = jo.getInteger("pageSize");
+        Integer pageSize = null;
 
-        if(pageNo == null || pageSize == null) {
+//        if(pageNo == null || pageSize == null) {
+//
+//            return new ResultJson(ResultCode.ERROR.getCode(), null);
+//        }
 
-            return new ResultJson(ResultCode.ERROR.getCode(), null);
-        }
-
-        return this.service.getCommunityList(pageNo, pageSize);
+        return this.service.getProductList(pageNo, pageSize);
     }
 
 
