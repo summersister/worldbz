@@ -1,1 +1,268 @@
-﻿
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>后台管理</title>
+
+    <link th:href="@{/static/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/static/css/fileinput.min.css}" rel="stylesheet">
+    <link th:href="@{/static/css/my/ie10-viewport-bug-workaround.css}" rel="stylesheet">
+    <link th:href="@{/static/css/login/dashboard.css}" rel="stylesheet">
+
+    <script th:src="@{/static/js/login/ie-emulation-modes-warning.js}"></script>
+</head>
+
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">包包包包子</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <!--<li><a href="#">Dashboard</a></li>-->
+                <!--<li><a href="#">Settings</a></li>-->
+                <!--<li><a href="#">Profile</a></li>-->
+                <!--<li><a href="#">Help</a></li>-->
+            </ul>
+            <!--<form class="navbar-form navbar-right">-->
+                <!--<input type="text" class="form-control" placeholder="Search...">-->
+            <!--</form>-->
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li class="active"><a href="#">商品管理 <span class="sr-only">(current)</span></a></li>
+                <!--<li><a href="#">用户管理</a></li>-->
+            </ul>
+            <!--<ul class="nav nav-sidebar">-->
+                <!--<li><a href="">Nav item</a></li>-->
+                <!--<li><a href="">Nav item again</a></li>-->
+                <!--<li><a href="">One more nav</a></li>-->
+                <!--<li><a href="">Another nav item</a></li>-->
+                <!--<li><a href="">More navigation</a></li>-->
+            <!--</ul>-->
+            <!--<ul class="nav nav-sidebar">-->
+                <!--<li><a href="">Nav item again</a></li>-->
+                <!--<li><a href="">One more nav</a></li>-->
+                <!--<li><a href="">Another nav item</a></li>-->
+            <!--</ul>-->
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <!--<h1 class="page-header">商品管理</h1>-->
+
+            <!--<div class="row placeholders">
+                <div class="col-xs-6 col-sm-3 placeholder">
+                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
+                    <h4>Label</h4>
+                    <span class="text-muted"></span>
+                </div>
+                <div class="col-xs-6 col-sm-3 placeholder">
+                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
+                    <h4>Label</h4>
+                    <span class="text-muted"></span>
+                </div>
+                <div class="col-xs-6 col-sm-3 placeholder">
+                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
+                    <h4>Label</h4>
+                    <span class="text-muted"></span>
+                </div>
+                <div class="col-xs-6 col-sm-3 placeholder">
+                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
+                    <h4>Label</h4>
+                    <span class="text-muted"></span>
+                </div>
+            </div>-->
+
+            <h2 class="sub-header">
+                商品列表&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="javascript:;" data-toggle="modal" data-target="#createProductModal"><span style="color:#ebcccc;font-size: 22px;" class="handle-col">创建商品</span></a>
+            </h2>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>商品id</th>
+                        <th>排序</th>
+                        <th>名</th>
+                        <th>介绍</th>
+                        <th>主图片</th>
+                        <th>图组</th>
+                        <th>创建时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody id="product-table-list">
+                    <tr>
+                        <td>1,001</td>
+                        <td>Lorem</td>
+                        <td>ipsum</td>
+                        <td>dolor</td>
+                        <td>dolor</td>
+                        <td>sit</td>
+                        <td>sit</td>
+                    </tr>
+                    <tr>
+                        <td>1,002</td>
+                        <td>amet</td>
+                        <td>consectetur</td>
+                        <td>adipiscing</td>
+                        <td>elit</td>
+                        <td>elit</td>
+                        <td>elit</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="createProductModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">创建商品</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <input type="email" class="form-control" id="12" placeholder="标题">
+                </div>
+
+                <div class="form-group">
+                    <input type="email" class="form-control" id="22" placeholder="内容">
+                </div>
+
+                <div class="form-group">
+                    <textarea placeholder="内容" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                </div>
+
+                <div style="margin: auto auto;display: block;height: auto;max-width: 100%;">
+                    <div class="container-fluid">
+                        <form id="form" th:action="@{/base/file/admin/uploadTest}" method="post" enctype="multipart/form-data">
+                            <div class="row form-group">
+                                <label class="col-md-4">图片上传:</label>
+                                <div class="col-sm-12">
+                                    <input id="input-id" name="file" multiple="multiple" th:multiple="multiple" type="file" data-show-caption="true"/>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary">提交</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<script th:src="@{/static/js/jquery.min.js}"></script>
+<script th:src="@{/static/js/bootstrap.min.js}"></script>
+<script th:src="@{/static/js/fileinput.min.js}"></script>
+<script th:src="@{/static/js/zh.js}"></script>
+<!--<script th:src="@{/static/js/layer.js}"></script>-->
+<script th:inline="javascript">
+    $(document).ready(function () {
+        getProduct();
+        initFileInput("input-id");
+    });
+
+    function getProduct() {
+        $.ajax({
+            url: "/admin/product/v1/getProductList",
+            data: {},
+            type:'post',
+            async:false,
+            success: function (data) {
+
+                console.log(data);
+
+                $("#product-table-list").empty();
+
+                if(data.code == 0) {
+
+                    var edit = '<a href="javascript:;" onclick=""><span style="color:#ed5565;" class="handle-col">下架</span></a>';
+                    var del = '<a href="javascript:;" onclick=""><span style="color:#ed5565;" class="handle-col">删除</span></a>';
+
+                    jQuery.each(data.model, function (i, product){
+                        $("#product-table-list").append(
+                            '<tr>' +
+                                '<th>' + product.id + '</th>' +
+                                '<th>' + product.sort + '</th>' +
+                                '<th>' + product.title + '</th>' +
+                                '<th>' + product.content + '</th>' +
+                                '<th>查看</th>' +
+                                '<th>查看</th>' +
+                                '<th>' + product.createTime + '</th>' +
+                                '<th>' + edit + '&nbsp;&nbsp;&nbsp;' + del + '</th>' +
+                            ' </tr>');
+                    });
+
+                }
+            },
+            error: function () {
+                console.log("error");
+            }
+        });
+    }
+
+    function initFileInput(ctrlName) {
+        var control = $('#' + ctrlName);
+        control.fileinput({
+            language: 'zh', //设置语言
+            uploadUrl: "/base/file/admin/uploadTest", //上传的地址
+            allowedFileExtensions: ['jpg', 'gif', 'png'],//接收的文件后缀
+            uploadAsync: false, //默认异步上传，这里如果不是异步上传，多个图片一次性提交到后台，只发一次请求，如果为异步上传，每张图片都会发一次请求，多次请求
+            showUpload: true, //是否显示上传按钮
+            showRemove : true, //显示移除按钮
+            showPreview : true, //是否显示预览
+            showCaption: false,//是否显示标题
+            browseClass: "btn btn-primary", //按钮样式
+            maxFileCount: 20, //允许同时上传的最大文件个数
+            enctype: 'multipart/form-data',
+            validateInitialCount:true,
+            msgFilesTooMany: "选择上传的文件数量({n}) 超过允许的最大数值{m}！",
+            layoutTemplates :{
+                // actionDelete:'', //去除上传预览的缩略图中的删除图标
+                // actionUpload:'',//去除上传预览缩略图中的上传图片；
+                // actionZoom:'',   //去除上传预览缩略图详情的图标
+                // actionDownload:'' //去除上传预览缩略图中的下载图标
+            },
+            uploadExtraData:function () {   //向后台传递的附带参数
+                return {};
+            }
+        }).on('filebatchuploadsuccess', function(event, data, previewId, index) {     //上传中
+            console.log('文件正在上传');
+        }).on("filebatchuploadsuccess", function (event, data, previewId, index) {    //一个文件上传成功
+            var response = data.response;
+            console.log(response);//打印出返回的json
+            console.log(response.status);//打印出状态
+        }).on('filebatchuploaderror', function(event, data, msg) {  //一个文件上传失败
+            console.log('文件上传失败！'+data.status);
+        })
+    }
+</script>
+</body>
+</html>

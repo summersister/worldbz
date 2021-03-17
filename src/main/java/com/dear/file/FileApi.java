@@ -1,26 +1,26 @@
 package com.dear.file;
 
-import com.dear.common.annotaion.Login;
 import com.dear.common.bean.ResultCode;
 import com.dear.common.bean.ResultJson;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
-@RestController
+@Controller
 @Api(tags = {"文件管理"})
 @RequestMapping("/base/file")
 public class FileApi {
@@ -33,7 +33,6 @@ public class FileApi {
 
     @ApiOperation(value = "上传文件", notes = "接口需要登录，文件上传的统一接口，若无特殊需求，一律走此接口进行文件上传")
     @RequestMapping(value = "/v1/upload", method = RequestMethod.POST)
-    @Login
     public ResultJson upload(@RequestParam("file") MultipartFile file) {
 
         String basePath = "v1/" + new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + "/";
@@ -66,5 +65,31 @@ public class FileApi {
         }
         return new ResultJson(ResultCode.OK.getCode(), "/" + accessPath + path22);
 
+    }
+
+    @RequestMapping("/admin/uploadTest")
+    public @ResponseBody Map<String,Object> uploadTest(@RequestParam("file")MultipartFile[] files, HttpServletRequest request){
+        MultipartResolver resolver = new CommonsMultipartResolver(request.getSession().getServletContext());
+        MultipartHttpServletRequest multipartRequest = resolver.resolveMultipart(request);
+        Map<String, String[]> parameterMap = multipartRequest.getParameterMap();    //获取前端传过来的参数
+        Set<Map.Entry<String, String[]>> entries = parameterMap.entrySet();
+        System.out.println("前端传过来的参数：------------");
+        for (Map.Entry<String, String[]> entry : entries) {
+            String key = entry.getKey();    //key是字符串
+            String[] value = entry.getValue();  //value是字符串数组
+            System.out.println(key+":"+ Arrays.toString(value));
+        }
+        System.out.println("文件的个数："+files.length);
+
+        System.out.println("打印文件的名字：--------------");
+        for (MultipartFile file : files) {
+            System.out.println(file.getOriginalFilename());
+        }
+
+        //返回前端的json
+        Map<String, Object> map = new HashMap<>();
+        map.put("status",200);
+        map.put("msg","上传成功");
+        return map;
     }
 }

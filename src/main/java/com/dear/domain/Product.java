@@ -21,11 +21,14 @@ public class Product {
     @TableField(value = "content")
     private String content;
 
-    @TableField(value = "head_url")
-    private String headUrl;
+    @TableField(value = "img_url")
+    private String imgUrl;
 
     @TableField(value = "del")
     private boolean del;
+
+    @TableField(value = "sort")
+    private Integer sort;
 
     @TableField(value = "create_time")
     private Date createTime;

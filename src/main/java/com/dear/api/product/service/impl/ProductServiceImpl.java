@@ -1,9 +1,10 @@
-package com.dear.api.community.service.impl;
+package com.dear.api.product.service.impl;
 
-import com.dear.api.community.service.IProductService;
+import com.dear.api.product.service.IProductService;
 import com.dear.common.bean.ResultCode;
 import com.dear.common.bean.ResultJson;
 import com.dear.domain.Product;
+import com.dear.domain.ProductVO;
 import com.dear.mapper.ProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,9 +18,16 @@ public class ProductServiceImpl implements IProductService {
     private ProductMapper productMapper;
 
     @Override
+    public ResultJson getProductListByDel() {
+
+        List<ProductVO> list = this.productMapper.getProductListByDel();
+
+        return new ResultJson(ResultCode.OK.getCode(), list);
+    }
+
+    @Override
     public ResultJson getProductList(Integer pageNo, Integer pageSize) {
 
-        //PageHelper.startPage(pageNo, pageSize);
         List<Product> list = this.productMapper.selectList(null);
 
         return new ResultJson(ResultCode.OK.getCode(), list);

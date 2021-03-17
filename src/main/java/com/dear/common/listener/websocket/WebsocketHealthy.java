@@ -19,11 +19,11 @@ public class WebsocketHealthy {
         log.info("正在连接列表" + JSON.toJSONString(this.ws.getMapKey()));
     }
 
-    @Scheduled(cron = "0/5 * * * * ? ")
-    public void testSend(){
-
-        log.info("测试发送数据");
-
-        this.ws.sendMessage("testtesttest");
-    }
+//    @Scheduled(cron = "0/5 * * * * ? ")
+//    public void testSend(){
+//
+//        log.info("测试发送数据");
+//
+//        this.ws.sendMessage("testtesttest");
+//    }
 }

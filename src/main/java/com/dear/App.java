@@ -7,6 +7,7 @@ import org.springframework.boot.web.server.ConfigurableWebServerFactory;
 import org.springframework.boot.web.server.ErrorPage;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -18,7 +19,7 @@ import org.springframework.web.filter.CorsFilter;
 @MapperScan("com.dear.mapper")
 @EnableScheduling
 @EnableAsync
-//@Configuration
+@Configuration
 public class App {
 
     public static void main(String[] args) {
