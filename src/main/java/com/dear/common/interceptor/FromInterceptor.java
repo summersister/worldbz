@@ -31,8 +31,11 @@ public class FromInterceptor extends HandlerInterceptorAdapter {
         String path = request.getServletPath();
         String from = request.getHeader("from");
 
-        System.out.println("拦截器工作开始 调用接口路径 path=" + path + ", from=" + from + "  " +
-                new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date()));
+        if(path != null && !path.contains("/static") && !path.contains("/file")) {
+
+            System.out.println("拦截器工作开始 调用接口路径 path=" + path + ", from=" + from + "  " +
+                    new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date()));
+        }
 
         return true;
     }
